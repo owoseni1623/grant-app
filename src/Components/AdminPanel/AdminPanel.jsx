@@ -310,25 +310,25 @@ function AdminPanel() {
 
   // Export PDF
   const exportPDF = async () => {
-    if (!selectedApp) return;
+  if (!selectedApp) return;
+  
+  try {
+    const response = await axiosInstance.get(`/api/admin/applications/${selectedApp._id}/export-pdf`, {
+      responseType: 'blob'
+    });
     
-    try {
-      const response = await axiosInstance.get(`/api/applications/${selectedApp._id}/export-pdf`, {
-        responseType: 'blob'
-      });
-      
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.setAttribute('download', `application-${selectedApp._id}.pdf`);
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-    } catch (err) {
-      console.error('Error exporting PDF:', err);
-      alert('Failed to export PDF. Please try again.');
-    }
-  };
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `application-${selectedApp._id}.pdf`);
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } catch (err) {
+    console.error('Error exporting PDF:', err);
+    alert('Failed to export PDF. Please try again.');
+  }
+};
 
   // Handle logout
   const handleLogout = () => {
