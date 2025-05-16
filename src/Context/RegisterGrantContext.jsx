@@ -458,7 +458,9 @@ export const RegisterProvider = ({ children }) => {
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
-        role: userData.role
+        role: userData.role,
+        avatar: userData.avatar || userData.avatarUrl,
+        memberSince: userData.memberSince
       }));
       
       // Update state
@@ -539,7 +541,9 @@ export const RegisterProvider = ({ children }) => {
         firstName: userData.firstName,
         lastName: userData.lastName,
         email: userData.email,
-        role: userData.role
+        role: userData.role,
+        avatar: userData.avatar || userData.avatarUrl,
+        memberSince: userData.memberSince
       }));
       
       // Update state
