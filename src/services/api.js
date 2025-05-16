@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Create axios instance with base URL
 const api = axios.create({
-  baseURL: '/api', // Adjust if your API is on a different base path
+  baseURL: '/api',
 });
 
 // Add auth token to every request

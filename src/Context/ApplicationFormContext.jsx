@@ -31,7 +31,7 @@ const ValidationUtils = {
 // Define API URLs
 const API_BASE_URL = import.meta.env?.VITE_API_URL || 
                      (typeof window !== 'undefined' && window.ENV_API_URL) || 
-                     'http://localhost:3000';
+                     'https://grant-api.onrender.com';
                      
 const API_ENDPOINTS = {
   SUBMIT_APPLICATION: `${API_BASE_URL}/api/grants/applications`,
