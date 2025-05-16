@@ -56,7 +56,7 @@ const ProfilePage = () => {
   }, []); // Empty dependency array to run only once on mount
 
   // Initialize profile data from state when available
-    useEffect(() => {
+  useEffect(() => {
     if (state && state.user) {
       setProfileData(prevData => ({
         ...prevData,
@@ -83,29 +83,6 @@ const ProfilePage = () => {
       }
     }
   }, [state && state.user]);
-
-  // Also modify the fetchProfileData function to prioritize the avatarUrl:
-  if (data.avatarUrl) {
-    setAvatarPreview(data.avatarUrl);
-  } else if (data.avatar) {
-    setAvatarPreview(data.avatar);
-  }
-
-  // And update the final part where userData is stored in localStorage:
-  const updatedUserData = {
-    ...userData,
-    firstName: data.firstName,
-    lastName: data.lastName,
-    email: data.email,
-    primaryPhone: data.primaryPhone,
-    mobilePhone: data.mobilePhone,
-    bio: data.bio,
-    organization: data.organization,
-    position: data.position,
-    avatar: data.avatarUrl || data.avatar, // Prioritize avatarUrl
-    memberSince: data.memberSince || userData.memberSince
-  };
-  localStorage.setItem('userData', JSON.stringify(updatedUserData));
 
   const fetchProfileData = async () => {
     try {
@@ -151,13 +128,10 @@ const ProfilePage = () => {
       });
       
       // Set avatar preview if available
-      if (data.avatar) {
+      if (data.avatarUrl) {
+        setAvatarPreview(data.avatarUrl);
+      } else if (data.avatar) {
         setAvatarPreview(data.avatar);
-        
-        // Store the avatar URL in userData
-        const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-        userData.avatar = data.avatar;
-        localStorage.setItem('userData', JSON.stringify(userData));
       }
       
       // Format and set member since date
@@ -194,7 +168,7 @@ const ProfilePage = () => {
         bio: data.bio,
         organization: data.organization,
         position: data.position,
-        avatar: data.avatar,
+        avatar: data.avatarUrl || data.avatar, // Prioritize avatarUrl
         memberSince: data.memberSince || userData.memberSince
       };
       localStorage.setItem('userData', JSON.stringify(updatedUserData));
