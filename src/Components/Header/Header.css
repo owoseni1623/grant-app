@@ -1,0 +1,694 @@
+:root {
+  /* Official US Government colors */
+  --primary-blue: #205493;
+  --dark-blue: #112e51;
+  --light-blue: #dce4ef;
+  --bright-blue: #0071bc;
+  --base-gray: #5b616b;
+  --light-gray: #f1f1f1;
+  --medium-gray: #d6d7d9;
+  --dark-gray: #323a45;
+  --accent-red: #e31c3d;
+  --focus-yellow: #ffdc00;
+  --white: #ffffff;
+}
+
+/* Reset and proper scoping */
+.log001-grants-header, .log001-grants-header * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Merriweather', 'Georgia', serif;
+}
+
+.log001-grants-header button, 
+.log001-grants-header input {
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+/* Main header styling */
+.log001-grants-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: var(--white);
+  border-bottom: 1px solid var(--medium-gray);
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+/* Header container for content */
+.log001-header-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 80px;
+  padding: 0 1.5rem;
+}
+
+/* Scrolled header state - more compact */
+.log001-grants-header.log001-scrolled {
+  height: 70px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+.log001-grants-header.log001-scrolled .log001-header-container {
+  height: 70px;
+}
+
+/* Logo styling - emphasizing the government look */
+.log001-logo-section {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.log001-logo-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.log001-header-logo {
+  height: 42px;
+  margin-right: 0.75rem;
+  transition: height 0.3s ease;
+}
+
+.log001-grants-header.log001-scrolled .log001-header-logo {
+  height: 36px;
+}
+
+.log001-site-title {
+  font-weight: 900;
+  font-size: 1.6rem;
+  letter-spacing: 0.05rem;
+  /* text-transform: uppercase; */
+  color: var(--dark-blue);
+  transition: font-size 0.3s ease;
+}
+
+.log001-grants-header.log001-scrolled .log001-site-title {
+  font-size: 1.4rem;
+}
+
+/* Desktop navigation styling */
+.log001-desktop-navigation {
+  margin-left: 1rem;
+}
+
+.log001-nav-links {
+  display: flex;
+  list-style-type: none;
+}
+
+.log001-nav-links li {
+  position: relative;
+  margin: 0 0.2rem;
+}
+
+.log001-nav-links a {
+  display: block;
+  padding: 0.8rem 1.2rem;
+  color: var(--dark-blue);
+  font-family: 'Source Sans Pro', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: color 0.2s ease, background-color 0.2s ease;
+  border-radius: 3px;
+}
+
+.log001-nav-links a:hover {
+  background-color: rgba(32, 84, 147, 0.08);
+  color: var(--primary-blue);
+}
+
+.log001-nav-links a:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 2px;
+}
+
+.log001-nav-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 50%;
+  width: 0;
+  height: 4px;
+  background-color: var(--bright-blue);
+  transition: width 0.3s ease, left 0.3s ease;
+}
+
+.log001-nav-links a:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Search bar styling */
+.log001-search-container {
+  position: relative;
+  margin-right: 1rem;
+}
+
+.log001-search-input {
+  width: 240px;
+  height: 36px;
+  padding: 0 16px 0 40px;
+  background-color: var(--light-gray);
+  border: 1px solid var(--medium-gray);
+  border-radius: 4px;
+  font-size: 0.95rem;
+  transition: all 0.25s ease-in-out;
+}
+
+.log001-search-input:focus {
+  width: 280px;
+  background-color: var(--white);
+  border-color: var(--primary-blue);
+  outline: 2px solid var(--primary-blue);
+  outline-offset: -1px;
+  box-shadow: 0 0 0 1px var(--primary-blue);
+}
+
+.log001-search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--base-gray);
+  font-size: 1rem;
+  pointer-events: none;
+}
+
+/* User section styling */
+.log001-user-section {
+  display: flex;
+  align-items: center;
+}
+
+.log001-notifications {
+  position: relative;
+  margin-right: 1.5rem;
+  cursor: pointer;
+}
+
+.log001-notification-icon {
+  font-size: 1.3rem;
+  color: var(--base-gray);
+  transition: color 0.2s ease;
+}
+
+.log001-notifications:hover .log001-notification-icon {
+  color: var(--primary-blue);
+}
+
+.log001-notification-badge {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  width: 18px;
+  height: 18px;
+  background-color: var(--accent-red);
+  color: var(--white);
+  font-size: 0.7rem;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}
+
+.log001-user-profile {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 0.3rem 0.5rem;
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.log001-user-profile:hover {
+  background-color: var(--light-gray);
+}
+
+.log001-profile-image {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 2px solid var(--light-blue);
+  object-fit: cover;
+}
+
+.log001-user-name {
+  margin-left: 0.75rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: var(--dark-gray);
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Auth buttons styling - proper government UI */
+.log001-auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.log001-login-btn, .log001-register-btn, .log001-logout-btn {
+  height: 38px;
+  padding: 0 1.2rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.log001-login-btn {
+  background-color: transparent;
+  color: var(--primary-blue);
+  border: 1px solid var(--primary-blue);
+}
+
+.log001-login-btn:hover {
+  background-color: rgba(32, 84, 147, 0.08);
+}
+
+.log001-login-btn:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 2px;
+}
+
+.log001-register-btn {
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: 1px solid var(--primary-blue);
+}
+
+.log001-register-btn:hover {
+  background-color: var(--dark-blue);
+  border-color: var(--dark-blue);
+}
+
+.log001-register-btn:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 2px;
+}
+
+.log001-logout-btn {
+  background-color: transparent;
+  color: var(--accent-red);
+  border: 1px solid var(--accent-red);
+  padding: 0 1rem;
+}
+
+.log001-logout-btn:hover {
+  background-color: rgba(227, 28, 61, 0.08);
+}
+
+.log001-logout-btn:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 2px;
+}
+
+.log001-logout-btn svg {
+  margin-right: 0.5rem;
+  font-size: 0.9rem;
+}
+
+/* Mobile menu button styling */
+.log001-mobile-menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1010;
+  padding: 0;
+}
+
+.log001-mobile-menu-toggle span {
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-blue);
+  border-radius: 1px;
+  transition: all 0.3s ease;
+}
+
+.log001-mobile-menu-toggle:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 4px;
+}
+
+.log001-mobile-menu-toggle.log001-open span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.log001-mobile-menu-toggle.log001-open span:nth-child(2) {
+  opacity: 0;
+}
+
+.log001-mobile-menu-toggle.log001-open span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile navigation styles */
+.log001-mobile-navigation {
+  position: fixed;
+  top: 80px;
+  right: -100%;
+  width: 85%;
+  max-width: 350px;
+  height: calc(100vh - 80px);
+  background-color: var(--white);
+  z-index: 1005;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.15);
+  transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.log001-grants-header.log001-scrolled .log001-mobile-navigation {
+  top: 70px;
+  height: calc(100vh - 70px);
+}
+
+.log001-mobile-navigation.log001-mobile-open {
+  right: 0;
+}
+
+.log001-mobile-navigation .log001-nav-links {
+  flex-direction: column;
+  width: 100%;
+  margin-bottom: 1.5rem;
+  border-bottom: 1px solid var(--medium-gray);
+  padding-bottom: 1rem;
+}
+
+.log001-mobile-navigation .log001-nav-links li {
+  width: 100%;
+  margin: 0;
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transition-delay: calc(var(--item-index) * 0.07s);
+}
+
+.log001-mobile-navigation.log001-mobile-open .log001-nav-links li {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.log001-mobile-navigation .log001-mobile-nav-link {
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
+  padding: 0.8rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--dark-blue);
+  cursor: pointer;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: color 0.2s ease;
+}
+
+.log001-mobile-navigation .log001-mobile-nav-link:hover {
+  color: var(--bright-blue);
+}
+
+.log001-mobile-navigation .log001-mobile-nav-link:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 2px;
+}
+
+.log001-mobile-navigation .log001-mobile-nav-link::before {
+  content: '›';
+  margin-right: 0.8rem;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: var(--primary-blue);
+  transform: translateY(-1px);
+}
+
+.log001-mobile-navigation .log001-search-container {
+  width: 100%;
+  margin: 0 0 1.5rem 0;
+}
+
+.log001-mobile-navigation .log001-search-input {
+  width: 100%;
+  height: 42px;
+  background-color: var(--white);
+  border: 1px solid var(--medium-gray);
+}
+
+.log001-mobile-navigation .log001-search-input:focus {
+  width: 100%;
+}
+
+.log001-mobile-navigation .log001-user-section {
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 1rem;
+  border-top: 1px solid var(--medium-gray);
+}
+
+.log001-mobile-navigation .log001-user-profile {
+  width: 100%;
+  padding: 0.5rem 0;
+  margin-bottom: 1rem;
+}
+
+.log001-mobile-navigation .log001-user-name {
+  max-width: calc(100% - 60px);
+}
+
+.log001-mobile-navigation .log001-notifications {
+  margin-bottom: 1rem;
+  align-self: flex-end;
+}
+
+.log001-mobile-navigation .log001-auth-buttons {
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.log001-mobile-navigation .log001-auth-buttons button {
+  width: 100%;
+  height: 44px;
+}
+
+.log001-mobile-navigation .log001-logout-btn {
+  margin-top: 0.5rem;
+  justify-content: center;
+}
+
+/* Mobile menu backdrop overlay */
+.log001-mobile-menu-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(17, 46, 81, 0.6);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.log001-mobile-menu-backdrop.log001-active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Header spacer to prevent content from being hidden */
+.log001-header-spacer {
+  height: 80px;
+  transition: height 0.3s ease;
+}
+
+.log001-grants-header.log001-scrolled + .log001-header-spacer {
+  height: 70px;
+}
+
+/* Desktop vs Mobile visibility control */
+.log001-desktop-only {
+  display: flex;
+}
+
+.log001-mobile-navigation {
+  display: none;
+}
+
+/* Focus styles for accessibility */
+a:focus, button:focus, input:focus {
+  outline: 2px solid var(--focus-yellow);
+  outline-offset: 2px;
+}
+
+/* Proper animations for interactive elements */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideIn {
+  from { transform: translateY(-10px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* Media Queries for responsive design */
+@media (max-width: 1200px) {
+  .log001-header-container {
+    padding: 0 1.25rem;
+  }
+  
+  .log001-nav-links a {
+    padding: 0.7rem 1rem;
+  }
+  
+  .log001-search-input {
+    width: 200px;
+  }
+  
+  .log001-search-input:focus {
+    width: 240px;
+  }
+  
+  .log001-user-name {
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 992px) {
+  .log001-desktop-navigation {
+    display: none;
+  }
+  
+  .log001-desktop-only {
+    display: none;
+  }
+  
+  .log001-mobile-menu-toggle {
+    display: flex;
+  }
+  
+  .log001-mobile-navigation {
+    display: flex;
+  }
+  
+  .log001-header-container {
+    height: 70px;
+  }
+  
+  .log001-grants-header {
+    height: 70px;
+  }
+  
+  .log001-header-spacer {
+    height: 70px;
+  }
+  
+  .log001-header-logo {
+    height: 36px;
+  }
+  
+  .log001-site-title {
+    font-size: 1.4rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .log001-header-container {
+    padding: 0 1rem;
+  }
+  
+  .log001-mobile-navigation {
+    width: 100%;
+    max-width: 100%;
+    padding: 1.25rem;
+  }
+  
+  .log001-site-title {
+    font-size: 1.2rem;
+  }
+  
+  .log001-header-logo {
+    height: 32px;
+    margin-right: 0.5rem;
+  }
+  
+  .log001-mobile-navigation .log001-nav-links li {
+    transform: translateX(15px);
+  }
+}
+
+/* Animation for menu items */
+@media (prefers-reduced-motion: no-preference) {
+  .log001-mobile-navigation .log001-nav-links li {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+  }
+  
+  .log001-user-section, .log001-auth-buttons {
+    animation: fadeIn 0.4s ease-out forwards;
+  }
+  
+  .log001-notification-badge {
+    animation: slideIn 0.3s ease-out forwards;
+  }
+}
+
+/* Prevent body scrolling when mobile menu is open */
+body.log001-mobile-menu-open {
+  overflow: hidden;
+}
+
+/* Accessibility for screen readers */
+.log001-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+/* Handle high contrast mode for accessibility */
+@media (forced-colors: active) {
+  .log001-nav-links a:hover::after,
+  .log001-login-btn,
+  .log001-register-btn,
+  .log001-logout-btn {
+    border: 1px solid currentColor;
+  }
+  
+  .log001-notification-badge {
+    border: 1px solid currentColor;
+  }
+}

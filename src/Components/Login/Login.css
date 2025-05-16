@@ -1,0 +1,262 @@
+:root {
+  /* Official Grant.gov Colors */
+  --primary-blue: #003E7E;
+  --secondary-blue: #0068B4;
+  --accent-green: #2E8540;
+  --accent-red: #E31C3D;
+  --neutral-gray: #5B616B;
+  --light-gray: #F1F1F1;
+  --white: #FFFFFF;
+  --black: #212121;
+  
+  /* Font settings */
+  --font-primary: 'Source Sans Pro', 'Helvetica Neue', 'Helvetica', 'Roboto', 'Arial', sans-serif;
+  
+  /* Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  
+  /* Border radius */
+  --border-radius: 4px;
+  
+  /* Box shadow */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}
+
+
+
+body {
+  font-family: var(--font-primary);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--black);
+  background-color: var(--light-gray);
+}
+
+a {
+  color: var(--secondary-blue);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover, a:focus {
+  color: var(--primary-blue);
+  text-decoration: underline;
+}
+
+/* Login Container */
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: var(--spacing-md);
+  background-color: var(--light-gray);
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23003E7E' fill-opacity='0.05' fill-rule='evenodd'/%3E%3C/svg%3E");
+}
+
+/* Form Container */
+.login-form-container {
+  width: 100%;
+  max-width: 450px;
+  padding: var(--spacing-xl);
+  background-color: var(--white);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  position: relative;
+  overflow: hidden;
+  margin: 4rem auto;
+}
+
+/* Header styling with Grant.gov branding */
+.login-form-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 8px;
+  background: linear-gradient(to right, var(--primary-blue), var(--secondary-blue));
+}
+
+.login-form-container h2 {
+  margin-bottom: var(--spacing-xl);
+  color: var(--primary-blue);
+  font-weight: 600;
+  text-align: center;
+  font-size: 1.75rem;
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--light-gray);
+}
+
+/* Form styling */
+form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+label {
+  font-weight: 600;
+  color: var(--neutral-gray);
+  font-size: 0.9rem;
+}
+
+input {
+  padding: var(--spacing-md);
+  border: 1px solid #DDD;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--secondary-blue);
+  box-shadow: 0 0 0 3px rgba(0, 104, 180, 0.2);
+}
+
+input.input-error {
+  border-color: var(--accent-red);
+}
+
+input.input-error:focus {
+  box-shadow: 0 0 0 3px rgba(227, 28, 61, 0.2);
+}
+
+input::placeholder {
+  color: #AAA;
+}
+
+input:disabled {
+  background-color: #F5F5F5;
+  cursor: not-allowed;
+}
+
+.error-text {
+  color: var(--accent-red);
+  font-size: 0.8rem;
+  margin-top: var(--spacing-xs);
+}
+
+.error-message {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  background-color: rgba(227, 28, 61, 0.1);
+  border-left: 4px solid var(--accent-red);
+  color: var(--accent-red);
+  border-radius: var(--border-radius);
+  font-size: 0.9rem;
+}
+
+/* Button styling */
+.submit-button {
+  padding: var(--spacing-md);
+  background-color: var(--primary-blue);
+  color: var(--white);
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+  margin-top: var(--spacing-md);
+}
+
+.submit-button:hover, 
+.submit-button:focus {
+  background-color: var(--secondary-blue);
+}
+
+.submit-button:disabled {
+  background-color: var(--neutral-gray);
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* Links section */
+.form-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: var(--spacing-lg);
+  font-size: 0.9rem;
+}
+
+/* Admin Login specific styling */
+.admin-login .login-form-container {
+  border-top: 8px solid var(--accent-green);
+}
+
+.admin-login .login-form-container::before {
+  background: linear-gradient(to right, var(--accent-green), var(--secondary-blue));
+}
+
+.admin-login .login-form-container h2 {
+  color: var(--accent-green);
+}
+
+.admin-login .submit-button {
+  background-color: var(--accent-green);
+}
+
+.admin-login .submit-button:hover,
+.admin-login .submit-button:focus {
+  background-color: #267A36; /* Darker green on hover */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .login-form-container {
+    padding: var(--spacing-lg);
+  }
+  
+  .form-links {
+    flex-direction: column;
+    gap: var(--spacing-md);
+    align-items: center;
+  }
+}
+
+/* Animation for error messages */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.error-message {
+  animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) both;
+}
+
+/* Accessibility focus indicators */
+a:focus, button:focus, input:focus {
+  outline: 2px solid var(--secondary-blue);
+  outline-offset: 2px;
+}
+
+/* Print styles */
+@media print {
+  .login-container {
+    background: none;
+    padding: 0;
+  }
+  
+  .login-form-container {
+    box-shadow: none;
+    border: 1px solid #DDD;
+  }
+  
+  .submit-button {
+    background-color: #666 !important;
+  }
+}
