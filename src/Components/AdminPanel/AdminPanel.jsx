@@ -846,7 +846,7 @@ function AdminPanel() {
                           <div className="document-container">
                             {selectedApp.documents?.idCardFront ? (
                               <img 
-                                src={`${API_URL}/uploads/${selectedApp.documents.idCardFront.split('uploads/')[1] || selectedApp.documents.idCardFront.split('/').pop()}`} 
+                                src={`${API_URL}/uploads/${selectedApp.documents.idCardFront.split('/').pop()}`} 
                                 alt="ID Card Front" 
                                 className="document-image" 
                                 onError={(e) => {
@@ -875,7 +875,7 @@ function AdminPanel() {
                           <div className="document-container">
                             {selectedApp.documents?.idCardBack ? (
                               <img 
-                                src={`${API_URL}/uploads/${selectedApp.documents.idCardFront.split('uploads/')[1] || selectedApp.documents.idCardFront.split('/').pop()}`} 
+                                src={`${API_URL}/uploads/${selectedApp.documents.idCardBack.split('/').pop()}`} 
                                 alt="ID Card Back" 
                                 className="document-image" 
                                 onError={(e) => {
@@ -903,7 +903,7 @@ function AdminPanel() {
                           <div className="document-container">
                             {selectedApp.documents?.proofOfAddress ? (
                               <img 
-                                src={`${API_URL}/uploads/${selectedApp.documents.idCardFront.split('uploads/')[1] || selectedApp.documents.idCardFront.split('/').pop()}`} 
+                                src={`${API_URL}/uploads/${selectedApp.documents.proofOfAddress.split('/').pop()}`} 
                                 alt="Address Proof" 
                                 className="document-image" 
                                 onError={(e) => {
@@ -931,7 +931,7 @@ function AdminPanel() {
                           <div className="document-container">
                             {selectedApp.documents?.incomeVerification ? (
                               <img 
-                                src={`${API_URL}/uploads/${selectedApp.documents.idCardFront.split('uploads/')[1] || selectedApp.documents.idCardFront.split('/').pop()}`}
+                                src={`${API_URL}/uploads/${selectedApp.documents.incomeVerification.split('/').pop()}`} 
                                 alt="Income Verification" 
                                 className="document-image" 
                                 onError={(e) => {
