@@ -337,6 +337,30 @@ function AdminPanel() {
     navigate('/admin/login');
   };
 
+  // Get document URL helper function
+  const getDocumentUrl = (documentPath) => {
+    if (!documentPath) return null;
+    
+    // If the path is already a full URL, return it
+    if (documentPath.startsWith('http://') || documentPath.startsWith('https://')) {
+      return documentPath;
+    }
+    
+    // If it's just a filename (without a path), prepend with API URL and uploads
+    if (!documentPath.includes('/')) {
+      return `${API_URL}/uploads/${documentPath}`;
+    }
+    
+    // If it has a path but not full URL, handle various formats
+    if (documentPath.startsWith('/uploads/')) {
+      return `${API_URL}${documentPath}`;
+    }
+    
+    // Get just the filename if it's a full path
+    const filename = documentPath.split('/').pop();
+    return `${API_URL}/uploads/${filename}`;
+  };
+
   // Show login button if not authenticated
   if (!isAuthenticated) {
     return (
