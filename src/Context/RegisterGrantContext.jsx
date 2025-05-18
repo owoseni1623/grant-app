@@ -460,6 +460,7 @@ export const RegisterProvider = ({ children }) => {
         email: userData.email,
         role: userData.role,
         avatar: userData.avatar || userData.avatarUrl,
+        avatar: userData.avatarUrl || userData.avatar,
         memberSince: userData.memberSince
       }));
       

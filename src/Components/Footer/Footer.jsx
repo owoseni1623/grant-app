@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   FaFacebook,
@@ -19,7 +19,7 @@ const Footer = () => {
   return (
     <footer className="platform-footer">
       <div className="footer-content">
-        <div className="footer-section" style={{ "--section-index": 1 }}>
+        <div className="footer-section">
           <h4>Quick Links</h4>
           <ul>
             <li><Link to="/find-grants">Find Grants</Link></li>
@@ -36,7 +36,7 @@ const Footer = () => {
             )}
           </ul>
         </div>
-        <div className="footer-section" style={{ "--section-index": 2 }}>
+        <div className="footer-section">
           <h4>Support</h4>
           <ul>
             <li><Link to="/faq">FAQ</Link></li>
@@ -53,7 +53,7 @@ const Footer = () => {
             )}
           </ul>
         </div>
-        <div className="footer-section" style={{ "--section-index": 3 }}>
+        <div className="footer-section">
           <h4>Connect With Us</h4>
           <div className="contact-info">
             <p><FaEnvelope /> support@grantsplatform.com</p>
