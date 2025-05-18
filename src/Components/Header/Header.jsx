@@ -142,7 +142,7 @@ const Header = () => {
   const getNavigationItems = () => {
     const baseItems = [
       { name: 'Home', path: '/' },
-      { name: 'Find Grants', path: '/find-grants' }
+      { name: 'Grants', path: '/find-grants' }
     ];
     
     // Fix: Use directly destructured isAuthenticated instead of state.isAuthenticated
