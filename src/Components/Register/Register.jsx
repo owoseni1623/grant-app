@@ -4,8 +4,13 @@ import { useRegister } from '../../Context/RegisterGrantContext';
 import './Register.css'
 
 const Register = () => {
+  // Fixed: Remove the destructuring of 'state' - get properties directly
   const {
-    state: { formData, errors: formErrors, loading, error, success },
+    formData, 
+    errors: formErrors, 
+    loading, 
+    error, 
+    success,
     updateForm,
     validateField,
     handleRegisterSubmit

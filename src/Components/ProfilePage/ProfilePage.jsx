@@ -252,34 +252,62 @@ const ProfilePage = () => {
       throw new Error('Authentication token not found');
     }
     
-    // Create FormData for file upload support
-    const formData = new FormData();
-    Object.keys(profileData).forEach(key => {
-      if (key === 'avatar' && profileData[key] instanceof File) {
-        formData.append(key, profileData[key]);
-      } else if (key !== 'avatar' || typeof profileData[key] === 'string') {
-        formData.append(key, profileData[key]);
-      }
-    });
+    // Check if we have a file upload (new avatar selected)
+    const hasNewAvatar = profileData.avatar instanceof File;
+    
+    let requestBody;
+    let requestHeaders = {
+      'Authorization': `Bearer ${token}`,
+    };
+    
+    if (hasNewAvatar) {
+      // Use FormData for file upload
+      const formData = new FormData();
+      
+      // Add all text fields
+      formData.append('firstName', profileData.firstName || '');
+      formData.append('lastName', profileData.lastName || '');
+      formData.append('primaryPhone', profileData.primaryPhone || '');
+      formData.append('mobilePhone', profileData.mobilePhone || '');
+      formData.append('bio', profileData.bio || '');
+      formData.append('organization', profileData.organization || '');
+      formData.append('position', profileData.position || '');
+      
+      // Add the avatar file
+      formData.append('avatar', profileData.avatar);
+      
+      requestBody = formData;
+      // Don't set Content-Type for FormData - browser will set it with boundary
+    } else {
+      // Use JSON for regular updates without file
+      requestBody = JSON.stringify({
+        firstName: profileData.firstName || '',
+        lastName: profileData.lastName || '',
+        primaryPhone: profileData.primaryPhone || '',
+        mobilePhone: profileData.mobilePhone || '',
+        bio: profileData.bio || '',
+        organization: profileData.organization || '',
+        position: profileData.position || ''
+      });
+      
+      requestHeaders['Content-Type'] = 'application/json';
+    }
     
     // Make API call to update profile
     const response = await fetch('https://grant-api.onrender.com/api/users/profile', {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        // Don't set Content-Type when using FormData, the browser will set it with the correct boundary
-      },
-      body: formData
+      headers: requestHeaders,
+      body: requestBody
     });
 
     if (!response.ok) {
       const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to update profile');
+      throw new Error(errorData.message || `Failed to update profile: ${response.status}`);
     }
 
     const updatedUser = await response.json();
     
-    // IMPROVED: Get consistent avatar URL from response
+    // Get consistent avatar URL from response
     const avatarURL = updatedUser.avatarUrl || updatedUser.avatar;
     
     // Update both states: context state and localStorage
@@ -309,11 +337,26 @@ const ProfilePage = () => {
     };
     localStorage.setItem('userData', JSON.stringify(updatedUserData));
     
+    // Update local profile data and reset avatar file reference
+    setProfileData(prev => ({
+      ...prev,
+      ...updatedData,
+      avatar: null // Reset file object after successful upload
+    }));
+    
+    // Update avatar preview with new URL
+    if (avatarURL) {
+      setAvatarPreview(avatarURL);
+    }
+    
     setUpdateSuccess(true);
     setIsEditing(false);
     
-    // Refresh profile data to ensure consistency
-    await fetchProfileData();
+    // Clear any previous errors
+    if (setError) {
+      setError('');
+    }
+    
   } catch (error) {
     console.error('Error updating profile:', error);
     if (setError) {
