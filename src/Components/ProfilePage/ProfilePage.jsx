@@ -57,93 +57,110 @@ const ProfilePage = () => {
 
   // Initialize profile data from state when available
   useEffect(() => {
-  if (state && state.user) {
-    setProfileData(prevData => ({
-      ...prevData,
-      firstName: state.user.firstName || '',
-      lastName: state.user.lastName || '',
-      email: state.user.email || '',
-      primaryPhone: state.user.primaryPhone || '',
-      mobilePhone: state.user.mobilePhone || '',
-      bio: state.user.bio || '',
-      organization: state.user.organization || '',
-      position: state.user.position || '',
-    }));
-    
-    // IMPROVED: Check both avatar and avatarUrl consistently
-    const avatarSource = state.user.avatarUrl || state.user.avatar;
-    if (avatarSource) {
-      setAvatarPreview(avatarSource);
+    if (state && state.user) {
+      setProfileData(prevData => ({
+        ...prevData,
+        firstName: state.user.firstName || '',
+        lastName: state.user.lastName || '',
+        email: state.user.email || '',
+        primaryPhone: state.user.primaryPhone || '',
+        mobilePhone: state.user.mobilePhone || '',
+        bio: state.user.bio || '',
+        organization: state.user.organization || '',
+        position: state.user.position || '',
+      }));
+      
+      // IMPROVED: Check both avatar and avatarUrl consistently
+      const avatarSource = state.user.avatarUrl || state.user.avatar;
+      if (avatarSource) {
+        setAvatarPreview(avatarSource);
+      }
+      
+      // Format member since date if available
+      if (state.user.memberSince) {
+        const date = new Date(state.user.memberSince);
+        setMemberSince(date.toLocaleDateString());
+      } else {
+        setMemberSince(new Date().toLocaleDateString());
+      }
     }
-    
-    // Format member since date if available
-    if (state.user.memberSince) {
-      const date = new Date(state.user.memberSince);
-      setMemberSince(date.toLocaleDateString());
-    } else {
-      setMemberSince(new Date().toLocaleDateString());
-    }
-  }
-}, [state && state.user]);
+  }, [state && state.user]);
 
   const fetchProfileData = async () => {
-  try {
-    setLocalLoading(true);
-    // Use dispatch instead of calling setLoading directly
-    if (dispatch) {
-      dispatch({ type: 'SET_LOADING', payload: true });
-    }
-    
-    const token = localStorage.getItem('token');
-    
-    if (!token) {
-      throw new Error('Authentication token not found');
-    }
-    
-    // Make API call to fetch complete profile data
-    const response = await fetch('https://grant-api.onrender.com/api/users/profile', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json',
+    try {
+      setLocalLoading(true);
+      // Use dispatch instead of calling setLoading directly
+      if (dispatch) {
+        dispatch({ type: 'SET_LOADING', payload: true });
       }
-    });
+      
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
+      
+      // Make API call to fetch complete profile data
+      const response = await fetch('https://grant-api.onrender.com/api/users/profile', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        }
+      });
 
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to fetch profile data');
-    }
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Failed to fetch profile data');
+      }
 
-    const data = await response.json();
-    
-    // Update local state with fetched profile data
-    setProfileData({
-      firstName: data.firstName || '',
-      lastName: data.lastName || '',
-      email: data.email || '',
-      primaryPhone: data.primaryPhone || '',
-      mobilePhone: data.mobilePhone || '',
-      avatar: data.avatar || null,
-      bio: data.bio || '',
-      organization: data.organization || '',
-      position: data.position || '',
-    });
-    
-    // IMPROVED AVATAR HANDLING: Set avatar preview with consistent priority
-    const avatarSource = data.avatarUrl || data.avatar;
-    if (avatarSource) {
-      setAvatarPreview(avatarSource);
-    }
-    
-    // Format and set member since date
-    if (data.memberSince) {
-      const date = new Date(data.memberSince);
-      setMemberSince(date.toLocaleDateString());
-    }
-    
-    // Update global state with the fetched profile data
-    if (updateForm) {
-      updateForm({
+      const data = await response.json();
+      
+      // Update local state with fetched profile data
+      setProfileData({
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        email: data.email || '',
+        primaryPhone: data.primaryPhone || '',
+        mobilePhone: data.mobilePhone || '',
+        avatar: data.avatar || null,
+        bio: data.bio || '',
+        organization: data.organization || '',
+        position: data.position || '',
+      });
+      
+      // IMPROVED AVATAR HANDLING: Set avatar preview with consistent priority
+      const avatarSource = data.avatarUrl || data.avatar;
+      if (avatarSource) {
+        setAvatarPreview(avatarSource);
+      }
+      
+      // Format and set member since date
+      if (data.memberSince) {
+        const date = new Date(data.memberSince);
+        setMemberSince(date.toLocaleDateString());
+      }
+      
+      // Update global state with the fetched profile data
+      if (updateForm) {
+        updateForm({
+          firstName: data.firstName,
+          lastName: data.lastName,
+          email: data.email,
+          primaryPhone: data.primaryPhone,
+          mobilePhone: data.mobilePhone,
+          bio: data.bio,
+          organization: data.organization,
+          position: data.position,
+          avatar: data.avatarUrl || data.avatar,  // Use either avatarUrl or avatar, prioritizing avatarUrl
+          memberSince: data.memberSince
+        }, true);
+      }
+      
+      // Update userData in localStorage to persist profile data
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const updatedUserData = {
+        ...userData,
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
@@ -152,41 +169,24 @@ const ProfilePage = () => {
         bio: data.bio,
         organization: data.organization,
         position: data.position,
-        avatar: data.avatarUrl || data.avatar,  // Use either avatarUrl or avatar, prioritizing avatarUrl
-        memberSince: data.memberSince
-      }, true);
+        avatar: data.avatarUrl || data.avatar,  // Ensure avatar is always stored
+        memberSince: data.memberSince || userData.memberSince
+      };
+      localStorage.setItem('userData', JSON.stringify(updatedUserData));
+      
+    } catch (error) {
+      console.error('Error fetching profile data:', error);
+      if (setError) {
+        setError('Failed to load profile data. Please try again later.');
+      }
+    } finally {
+      setLocalLoading(false);
+      // Use dispatch instead of calling setLoading directly
+      if (dispatch) {
+        dispatch({ type: 'SET_LOADING', payload: false });
+      }
     }
-    
-    // Update userData in localStorage to persist profile data
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    const updatedUserData = {
-      ...userData,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      email: data.email,
-      primaryPhone: data.primaryPhone,
-      mobilePhone: data.mobilePhone,
-      bio: data.bio,
-      organization: data.organization,
-      position: data.position,
-      avatar: data.avatarUrl || data.avatar,  // Ensure avatar is always stored
-      memberSince: data.memberSince || userData.memberSince
-    };
-    localStorage.setItem('userData', JSON.stringify(updatedUserData));
-    
-  } catch (error) {
-    console.error('Error fetching profile data:', error);
-    if (setError) {
-      setError('Failed to load profile data. Please try again later.');
-    }
-  } finally {
-    setLocalLoading(false);
-    // Use dispatch instead of calling setLoading directly
-    if (dispatch) {
-      dispatch({ type: 'SET_LOADING', payload: false });
-    }
-  }
-};
+  };
   
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -199,6 +199,38 @@ const ProfilePage = () => {
   const handleAvatarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      // Validate file type on frontend
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+      const allowedExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.webp'];
+      const fileExtension = file.name.toLowerCase().substring(file.name.lastIndexOf('.'));
+      
+      console.log('Selected file:', {
+        name: file.name,
+        type: file.type,
+        size: file.size,
+        extension: fileExtension
+      });
+      
+      if (!allowedTypes.includes(file.type) && !allowedExtensions.includes(fileExtension)) {
+        if (setError) {
+          setError('Please select a valid image file (JPEG, PNG, GIF, or WebP)');
+        }
+        return;
+      }
+      
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        if (setError) {
+          setError('File size must be less than 5MB');
+        }
+        return;
+      }
+      
+      // Clear any previous errors
+      if (setError) {
+        setError('');
+      }
+      
       // Preview the selected image
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -242,130 +274,147 @@ const ProfilePage = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  try {
-    setLocalLoading(true);
-    const token = localStorage.getItem('token');
+    e.preventDefault();
     
-    if (!token) {
-      throw new Error('Authentication token not found');
-    }
-    
-    // Check if we have a file upload (new avatar selected)
-    const hasNewAvatar = profileData.avatar instanceof File;
-    
-    let requestBody;
-    let requestHeaders = {
-      'Authorization': `Bearer ${token}`,
-    };
-    
-    if (hasNewAvatar) {
-      // Use FormData for file upload
-      const formData = new FormData();
+    try {
+      setLocalLoading(true);
+      const token = localStorage.getItem('token');
       
-      // Add all text fields
-      formData.append('firstName', profileData.firstName || '');
-      formData.append('lastName', profileData.lastName || '');
-      formData.append('primaryPhone', profileData.primaryPhone || '');
-      formData.append('mobilePhone', profileData.mobilePhone || '');
-      formData.append('bio', profileData.bio || '');
-      formData.append('organization', profileData.organization || '');
-      formData.append('position', profileData.position || '');
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
       
-      // Add the avatar file
-      formData.append('avatar', profileData.avatar);
+      // Check if we have a file upload (new avatar selected)
+      const hasNewAvatar = profileData.avatar instanceof File;
       
-      requestBody = formData;
-      // Don't set Content-Type for FormData - browser will set it with boundary
-    } else {
-      // Use JSON for regular updates without file
-      requestBody = JSON.stringify({
-        firstName: profileData.firstName || '',
-        lastName: profileData.lastName || '',
-        primaryPhone: profileData.primaryPhone || '',
-        mobilePhone: profileData.mobilePhone || '',
-        bio: profileData.bio || '',
-        organization: profileData.organization || '',
-        position: profileData.position || ''
+      let requestBody;
+      let requestHeaders = {
+        'Authorization': `Bearer ${token}`,
+      };
+      
+      if (hasNewAvatar) {
+        // Use FormData for file upload
+        const formData = new FormData();
+        
+        // Add all text fields - ensure they're not undefined
+        formData.append('firstName', profileData.firstName || '');
+        formData.append('lastName', profileData.lastName || '');
+        formData.append('primaryPhone', profileData.primaryPhone || '');
+        formData.append('mobilePhone', profileData.mobilePhone || '');
+        formData.append('bio', profileData.bio || '');
+        formData.append('organization', profileData.organization || '');
+        formData.append('position', profileData.position || '');
+        
+        // Add the avatar file
+        formData.append('avatar', profileData.avatar);
+        
+        requestBody = formData;
+        // Don't set Content-Type for FormData - browser will set it with boundary
+        console.log('Sending FormData with avatar');
+      } else {
+        // Use JSON for regular updates without file
+        requestBody = JSON.stringify({
+          firstName: profileData.firstName || '',
+          lastName: profileData.lastName || '',
+          primaryPhone: profileData.primaryPhone || '',
+          mobilePhone: profileData.mobilePhone || '',
+          bio: profileData.bio || '',
+          organization: profileData.organization || '',
+          position: profileData.position || ''
+        });
+        
+        requestHeaders['Content-Type'] = 'application/json';
+        console.log('Sending JSON data');
+      }
+      
+      // Make API call to update profile
+      const response = await fetch('https://grant-api.onrender.com/api/users/profile', {
+        method: 'PUT',
+        headers: requestHeaders,
+        body: requestBody
       });
+
+      if (!response.ok) {
+        let errorData;
+        try {
+          errorData = await response.json();
+        } catch (parseError) {
+          throw new Error(`Server error: ${response.status} ${response.statusText}`);
+        }
+        
+        // Handle specific error cases
+        if (errorData.details) {
+          throw new Error(errorData.details);
+        } else if (errorData.errors && Array.isArray(errorData.errors)) {
+          const errorMessages = errorData.errors.map(err => err.message).join(', ');
+          throw new Error(errorMessages);
+        } else {
+          throw new Error(errorData.message || `Failed to update profile: ${response.status}`);
+        }
+      }
+
+      const updatedUser = await response.json();
+      console.log('Profile updated successfully:', updatedUser);
       
-      requestHeaders['Content-Type'] = 'application/json';
+      // Get consistent avatar URL from response
+      const avatarURL = updatedUser.avatarUrl || updatedUser.avatar;
+      
+      // Update both states: context state and localStorage
+      const updatedData = {
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
+        email: updatedUser.email,
+        primaryPhone: updatedUser.primaryPhone,
+        mobilePhone: updatedUser.mobilePhone,
+        bio: updatedUser.bio,
+        organization: updatedUser.organization,
+        position: updatedUser.position,
+        avatar: avatarURL // Use consistent avatar url
+      };
+      
+      // Update context state
+      if (updateForm) {
+        updateForm(updatedData, true);
+      }
+      
+      // Update localStorage userData to persist changes
+      const userData = JSON.parse(localStorage.getItem('userData') || '{}');
+      const updatedUserData = { 
+        ...userData, 
+        ...updatedData,
+        avatar: avatarURL // Ensure avatar is explicitly set with consistent naming
+      };
+      localStorage.setItem('userData', JSON.stringify(updatedUserData));
+      
+      // Update local profile data and reset avatar file reference
+      setProfileData(prev => ({
+        ...prev,
+        ...updatedData,
+        avatar: null // Reset file object after successful upload
+      }));
+      
+      // Update avatar preview with new URL
+      if (avatarURL) {
+        setAvatarPreview(avatarURL);
+      }
+      
+      setUpdateSuccess(true);
+      setIsEditing(false);
+      
+      // Clear any previous errors
+      if (setError) {
+        setError('');
+      }
+      
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      if (setError) {
+        setError(error.message || 'Failed to update profile. Please try again.');
+      }
+    } finally {
+      setLocalLoading(false);
     }
-    
-    // Make API call to update profile
-    const response = await fetch('https://grant-api.onrender.com/api/users/profile', {
-      method: 'PUT',
-      headers: requestHeaders,
-      body: requestBody
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || `Failed to update profile: ${response.status}`);
-    }
-
-    const updatedUser = await response.json();
-    
-    // Get consistent avatar URL from response
-    const avatarURL = updatedUser.avatarUrl || updatedUser.avatar;
-    
-    // Update both states: context state and localStorage
-    const updatedData = {
-      firstName: updatedUser.firstName,
-      lastName: updatedUser.lastName,
-      email: updatedUser.email,
-      primaryPhone: updatedUser.primaryPhone,
-      mobilePhone: updatedUser.mobilePhone,
-      bio: updatedUser.bio,
-      organization: updatedUser.organization,
-      position: updatedUser.position,
-      avatar: avatarURL // Use consistent avatar url
-    };
-    
-    // Update context state
-    if (updateForm) {
-      updateForm(updatedData, true);
-    }
-    
-    // Update localStorage userData to persist changes
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-    const updatedUserData = { 
-      ...userData, 
-      ...updatedData,
-      avatar: avatarURL // Ensure avatar is explicitly set with consistent naming
-    };
-    localStorage.setItem('userData', JSON.stringify(updatedUserData));
-    
-    // Update local profile data and reset avatar file reference
-    setProfileData(prev => ({
-      ...prev,
-      ...updatedData,
-      avatar: null // Reset file object after successful upload
-    }));
-    
-    // Update avatar preview with new URL
-    if (avatarURL) {
-      setAvatarPreview(avatarURL);
-    }
-    
-    setUpdateSuccess(true);
-    setIsEditing(false);
-    
-    // Clear any previous errors
-    if (setError) {
-      setError('');
-    }
-    
-  } catch (error) {
-    console.error('Error updating profile:', error);
-    if (setError) {
-      setError(error.message || 'Failed to update profile. Please try again.');
-    }
-  } finally {
-    setLocalLoading(false);
-  }
-};
+  };
 
   // Only redirect to login if authentication check is complete and user is not authenticated
   if (authChecked && !state?.isAuthenticated && !localStorage.getItem('token')) {
@@ -422,7 +471,7 @@ const ProfilePage = () => {
                   <input
                     id="avatar-input"
                     type="file"
-                    accept="image/*"
+                    accept="image/jpeg,image/jpg,image/png,image/gif,image/webp"
                     onChange={handleAvatarChange}
                   />
                 </div>
