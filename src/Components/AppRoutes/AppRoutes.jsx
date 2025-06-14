@@ -65,9 +65,9 @@ const AdminRoute = ({ children }) => {
     return <div className="loading">Loading...</div>;
   }
   
-  // Redirect to login if not admin
+  // Redirect to admin login if not admin
   if (!isAdmin) {
-    console.log('Admin check failed, redirecting to login');
+    console.log('Admin check failed, redirecting to admin login');
     return <Navigate to="/admin/login" replace />;
   }
   
@@ -86,6 +86,125 @@ const ProtectedAdminContent = ({ element }) => {
   return isAdmin ? element : <Navigate to="/admin/login" replace />;
 };
 
+// Admin Access Component - Simple page to show admin links
+const AdminAccess = () => {
+  const { isAdmin, isAuthenticated } = useRegister();
+  
+  return (
+    <div style={{ 
+      padding: '40px', 
+      maxWidth: '600px', 
+      margin: '0 auto', 
+      textAlign: 'center',
+      backgroundColor: '#f8f9fa',
+      borderRadius: '8px',
+      marginTop: '50px'
+    }}>
+      <h2>Administrator Access</h2>
+      
+      {!isAuthenticated ? (
+        <div>
+          <p>Please log in with administrator credentials to access the admin panel.</p>
+          <div style={{ marginTop: '30px' }}>
+            <a 
+              href="/admin/login" 
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '5px',
+                fontWeight: 'bold'
+              }}
+            >
+              Admin Login
+            </a>
+          </div>
+        </div>
+      ) : isAdmin ? (
+        <div>
+          <p>Welcome, Administrator!</p>
+          <div style={{ marginTop: '30px', display: 'flex', gap: '15px', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <a 
+              href="/admin/dashboard" 
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                backgroundColor: '#28a745',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '5px',
+                fontWeight: 'bold'
+              }}
+            >
+              Dashboard
+            </a>
+            <a 
+              href="/admin/applications" 
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                backgroundColor: '#17a2b8',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '5px',
+                fontWeight: 'bold'
+              }}
+            >
+              Manage Applications
+            </a>
+            <a 
+              href="/admin-panel" 
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                backgroundColor: '#6f42c1',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '5px',
+                fontWeight: 'bold'
+              }}
+            >
+              Admin Panel
+            </a>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <p style={{ color: '#dc3545' }}>Access Denied. Administrator privileges required.</p>
+          <div style={{ marginTop: '30px' }}>
+            <a 
+              href="/admin/login" 
+              style={{
+                display: 'inline-block',
+                padding: '12px 24px',
+                backgroundColor: '#007bff',
+                color: 'white',
+                textDecoration: 'none',
+                borderRadius: '5px',
+                fontWeight: 'bold'
+              }}
+            >
+              Admin Login
+            </a>
+          </div>
+        </div>
+      )}
+      
+      <div style={{ marginTop: '30px', fontSize: '14px', color: '#666' }}>
+        <p><strong>Available Admin Routes:</strong></p>
+        <ul style={{ listStyle: 'none', padding: 0 }}>
+          <li>• /admin/login - Admin Login Page</li>
+          <li>• /admin/dashboard - Admin Dashboard</li>
+          <li>• /admin/applications - Application Management</li>
+          <li>• /admin-panel - Direct Admin Panel Access</li>
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 const AppRoutes = () => {
   return (
     <Router>
@@ -94,6 +213,18 @@ const AppRoutes = () => {
         <Routes>
           {/* Admin routes with custom layout */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          
+          {/* Admin Access Hub - New route for easy admin access */}
+          <Route path="/admin-access" element={
+            <>
+              <Header />
+              <main>
+                <AdminAccess />
+              </main>
+              <Footer />
+            </>
+          } />
+          
           <Route path="/admin" element={
             <AdminRoute>
               <AdminLayout />
